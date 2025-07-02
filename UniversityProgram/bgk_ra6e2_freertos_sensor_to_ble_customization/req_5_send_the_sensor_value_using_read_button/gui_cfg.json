@@ -1,0 +1,66 @@
+{
+  "gui": {
+      "id": "0000",
+      "title": "US000 QC Example",
+      "version:": "0.0.1",
+      "tab": [
+      {
+          "id": "0001",
+          "name": "LED",
+          "toggle": {
+              "id": "0100",
+              "type": "uint8_t",
+              "name": "LED 1",
+              "default": 0
+          }
+      },
+      {
+          "id": "0002",
+          "name": "HS4001",
+          "parameters": {
+              "id": "0200",
+              "type": "blob",
+              "access": "r",
+              "list": [
+              {
+                  "id": "0201",
+                  "name": "TEMPERATURE",
+                  "units": "C",
+                  "type": "float",
+                  "access": "r",
+                  "auto_read": 0,
+                  "value": null
+              },
+              {
+                  "id": "0202",
+                  "name": "HUMIDITY",
+                  "units": "%",
+                  "type": "float",
+                  "access": "r",
+                  "auto_read": 0,
+                  "value": null
+              }
+              ]
+          }
+      },
+      {
+          "id": "0003",
+          "name": "About",
+          "parameters": {
+              "id": "0300",
+              "type": "blob",
+              "access": "r",
+              "list": [
+              {
+                  "id": "0301",
+                  "name": "Test Version",
+                  "type": "string",
+                  "access": "const",
+                  "value": null
+              }
+              ]
+          }
+      }
+      ]
+  }
+}
