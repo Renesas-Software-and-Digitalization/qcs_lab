@@ -20,7 +20,4 @@ For detailed documentation, please refer to the original user guide:
 
 ---
 
-## 📁 File Placement Instructions
 
-- Copy `configuration.xml` to: `bgk_ra6e2_baremetal/`
-- Copy `*.h and .c` file to: `bgk_ra6e2_baremetal/src`
