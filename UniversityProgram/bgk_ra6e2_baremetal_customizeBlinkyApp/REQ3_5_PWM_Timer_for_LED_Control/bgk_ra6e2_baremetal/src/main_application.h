@@ -8,11 +8,11 @@
  #define SET_PERIOD_125_MSECS    0x2000   // 125 ms period
  #define SET_PERIOD_75_MSECS     0x1000   // 75 ms period
  #define SET_PERIOD_37_MSECS     0x800    // 37.5 ms period
- #define SET_PERIOD_16_MSECS     0x400   // 16 ms period
- #define SET_PERIOD_8_MSECS      0x200   // 8 ms period
- #define SET_PERIOD_4_MSECS      0x100   // 4 ms period
- #define SET_PERIOD_2_MSECS      0x80    // 2 ms period
- #define SET_PERIOD_1_MSECS      0x40    // 1 ms period
+ #define SET_PERIOD_16_MSECS     0x400   // 16 ms period
+ #define SET_PERIOD_8_MSECS      0x200  // 8 ms period
+ #define SET_PERIOD_4_MSECS      0x100  // 4 ms period
+ #define SET_PERIOD_2_MSECS      0x80   // 2 ms period
+ #define SET_PERIOD_1_MSECS      0x40   // 1 ms period
 
  #define ENABLE_LED1 // Enable or disable LED1
  #define ENABLE_LED2 // Enable or disable LED2
