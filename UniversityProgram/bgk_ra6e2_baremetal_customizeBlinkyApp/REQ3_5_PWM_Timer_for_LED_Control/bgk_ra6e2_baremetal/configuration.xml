@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<raConfiguration version="11">
+<raConfiguration version="12">
   <generalSettings>
     <option key="#Board#" value="board.bgk_ra6e2"/>
     <option key="CPU" value="RA6E2"/>
@@ -178,9 +178,9 @@
       <description>General PWM Timer</description>
       <originalPack>Renesas.RA.5.9.0.pack</originalPack>
     </component>
-    <component apiversion="" class="CMSIS" condition="" group="CMSIS5" subgroup="CoreM" variant="" vendor="Arm" version="6.1.0+fsp.5.9.0.beta.0">
+    <component apiversion="" class="CMSIS" condition="" group="CMSIS5" subgroup="CoreM" variant="" vendor="Arm" version="6.1.0+fsp.5.9.0">
       <description>Arm CMSIS Version 6 - Core (M)</description>
-      <originalPack>Arm.CMSIS6.6.1.0+fsp.5.9.0.beta.0.pack</originalPack>
+      <originalPack>Arm.CMSIS6.6.1.0+fsp.5.9.0.pack</originalPack>
     </component>
   </raComponentSelection>
   <raElcConfiguration/>
