@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<raConfiguration version="11">
+<raConfiguration version="12">
   <generalSettings>
     <option key="#Board#" value="board.bgk_ra6e2"/>
     <option key="CPU" value="RA6E2"/>
@@ -158,10 +158,6 @@
       <description>Arm CMSIS Version 6 - Core (M)</description>
       <originalPack>Arm.CMSIS6.6.1.0+fsp.5.9.0.pack</originalPack>
     </component>
-    <component apiversion="" class="BSP" condition="" group="Board" subgroup="ra6e2_bgk" variant="" vendor="Renesas" version="5.9.0">
-      <description>RA6E2-BGK Board Support Files</description>
-      <originalPack>Renesas.RA_board_ra6e2_bgk.5.9.0.pack</originalPack>
-    </component>
     <component apiversion="" class="BSP" condition="" group="ra6e2" subgroup="device" variant="R7FA6E2BB3CFM" vendor="Renesas" version="5.9.0">
       <description>Board support package for R7FA6E2BB3CFM</description>
       <originalPack>Renesas.RA_mcu_ra6e2.5.9.0.pack</originalPack>
@@ -178,6 +174,10 @@
       <description>Board support package for RA6E2 - Events</description>
       <originalPack>Renesas.RA_mcu_ra6e2.5.9.0.pack</originalPack>
     </component>
+    <component apiversion="" class="BSP" condition="" group="Board" subgroup="ra6e2_bgk" variant="" vendor="Renesas" version="5.9.0">
+      <description>RA6E2-BGK Board Support Files</description>
+      <originalPack>Renesas.RA_board_ra6e2_bgk.5.9.0.pack</originalPack>
+    </component>
     <component apiversion="" class="HAL Drivers" condition="" group="all" subgroup="r_icu" variant="" vendor="Renesas" version="5.9.0">
       <description>External Interrupt</description>
       <originalPack>Renesas.RA.5.9.0.pack</originalPack>
@@ -185,7 +185,6 @@
   </raComponentSelection>
   <raElcConfiguration/>
   <raIcuConfiguration/>
-  <raLinkMapConfiguration/>
   <raModuleConfiguration>
     <module id="module.driver.ioport_on_ioport.0">
       <property id="module.driver.ioport.name" value="g_ioport"/>
