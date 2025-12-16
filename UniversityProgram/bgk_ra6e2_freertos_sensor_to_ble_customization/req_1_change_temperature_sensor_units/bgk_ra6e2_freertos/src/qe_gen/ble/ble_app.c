@@ -584,12 +584,11 @@ void ble_app_run(void) {
                     sm_scaling scaling;
                     sm_get_sensor_scaling(sensor_data.handle, &scaling);
                     float floatData = ((float)sensor_data.data * (float)scaling.multiplier)/(float)scaling.divider + (float)scaling.offset;
-
+                    
                     if (sm_get_sensor_type_by_handle(qc_sv_req_handlers[index].sensor_handler) == TEMPERATURE)
                     {
-                    	floatData = ((floatData * 18) / 10) + 32;
+                        floatData = ((floatData * 18) / 10) + 32;
                     }
-
                     sensor_data_array[index-2] = floatData;
                     break;
                 }
