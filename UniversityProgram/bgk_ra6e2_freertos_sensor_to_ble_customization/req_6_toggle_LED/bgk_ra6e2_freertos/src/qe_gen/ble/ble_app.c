@@ -1,32 +1,32 @@
 /***********************************************************************************************************************
-* DISCLAIMER
-* This software is supplied by Renesas Electronics Corporation and is only intended for use with Renesas products. No
-* other uses are authorized. This software is owned by Renesas Electronics Corporation and is protected under all
-* applicable laws, including copyright laws.
-* THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
-* THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED. TO THE MAXIMUM
-* EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES
-* SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY REASON RELATED TO THIS
-* SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
-* Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability of
-* this software. By using this software, you agree to the additional terms and conditions found by accessing the
-* following link:
-* http://www.renesas.com/disclaimer
-*
-* Copyright (C) 2019-2020 Renesas Electronics Corporation. All rights reserved.
-***********************************************************************************************************************/
+ * DISCLAIMER
+ * This software is supplied by Renesas Electronics Corporation and is only intended for use with Renesas products. No
+ * other uses are authorized. This software is owned by Renesas Electronics Corporation and is protected under all
+ * applicable laws, including copyright laws.
+ * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+ * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED. TO THE MAXIMUM
+ * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES
+ * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY REASON RELATED TO THIS
+ * SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+ * Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability of
+ * this software. By using this software, you agree to the additional terms and conditions found by accessing the
+ * following link:
+ * http://www.renesas.com/disclaimer
+ *
+ * Copyright (C) 2019-2020 Renesas Electronics Corporation. All rights reserved.
+ ***********************************************************************************************************************/
 
 /******************************************************************************
-* File Name    : ble_service.c
-* Device(s)    : RA4W1
-* Tool-Chain   : e2Studio
-* Description  : This is a application file for peripheral role.
-*******************************************************************************/
+ * File Name    : app_main.c
+ * Device(s)    : RA4W1
+ * Tool-Chain   : e2Studio
+ * Description  : This is a application file for peripheral role.
+ *******************************************************************************/
 
 /******************************************************************************
  Includes   <System Includes> , "Project Includes"
-*******************************************************************************/
+ *******************************************************************************/
 #include <string.h>
 #include "r_ble_api.h"
 #include "rm_ble_abs.h"
@@ -51,7 +51,7 @@ EventGroupHandle_t  g_ble_event_group_handle;
 
 /******************************************************************************
  User file includes
-*******************************************************************************/
+ *******************************************************************************/
 /* Start user code for file includes. Do not edit comment generated here */
 #include "qe_ble_profile.h"
 #include "gui_cfg.h"
@@ -74,7 +74,7 @@ EventGroupHandle_t  g_ble_event_group_handle;
 
 /******************************************************************************
  User macro definitions
-*******************************************************************************/
+ *******************************************************************************/
 /* Start user code for macro definitions. Do not edit comment generated here */
 #define BLE_OPTIMAL_MTU                     101
 #define EVENT_BIT_NOTIFY_CFM                (1UL << 0)
@@ -82,7 +82,7 @@ EventGroupHandle_t  g_ble_event_group_handle;
 
 /******************************************************************************
  Generated function prototype declarations
-*******************************************************************************/
+ *******************************************************************************/
 /* Internal functions */
 void gap_cb(uint16_t type, ble_status_t result, st_ble_evt_data_t *p_data);
 void gatts_cb(uint16_t type, ble_status_t result, st_ble_gatts_evt_data_t *p_data);
@@ -93,7 +93,7 @@ void app_main(void);
 
 /******************************************************************************
  User function prototype declarations
-*******************************************************************************/
+ *******************************************************************************/
 /* Start user code for function prototype declarations. Do not edit comment generated here */
 static void handle_read_gui_req(uint16_t id, uint8_t const * const data);
 static void handle_write_led(uint16_t id, uint8_t const * const data);
@@ -137,37 +137,37 @@ ble_abs_legacy_advertising_parameter_t g_ble_advertising_parameter =
 /* GATT server callback parameters */
 ble_abs_gatt_server_callback_set_t gs_abs_gatts_cb_param[] =
 {
-    {
-        .gatt_server_callback_function = gatts_cb,
-        .gatt_server_callback_priority = 1,
-    },
-    {
-        .gatt_server_callback_function = NULL,
-    }
+ {
+  .gatt_server_callback_function = gatts_cb,
+  .gatt_server_callback_priority = 1,
+ },
+ {
+  .gatt_server_callback_function = NULL,
+ }
 };
 
 /* GATT client callback parameters */
 ble_abs_gatt_client_callback_set_t gs_abs_gattc_cb_param[] =
 {
-    {
-        .gatt_client_callback_function = gattc_cb,
-        .gatt_client_callback_priority = 1,
-    },
-    {
-        .gatt_client_callback_function = NULL,
-    }
+ {
+  .gatt_client_callback_function = gattc_cb,
+  .gatt_client_callback_priority = 1,
+ },
+ {
+  .gatt_client_callback_function = NULL,
+ }
 };
 
 /* GATT server Prepare Write Queue parameters */
 static st_ble_gatt_queue_elm_t  gs_queue_elms[BLE_GATTS_QUEUE_ELEMENTS_SIZE];
 static uint8_t gs_buffer[BLE_GATTS_QUEUE_BUFFER_LEN];
 static st_ble_gatt_pre_queue_t gs_queue[BLE_GATTS_QUEUE_NUM] = {
-    {
-        .p_buf_start = gs_buffer,
-        .buffer_len  = BLE_GATTS_QUEUE_BUFFER_LEN,
-        .p_queue     = gs_queue_elms,
-        .queue_size  = BLE_GATTS_QUEUE_ELEMENTS_SIZE,
-    }
+                                                                {
+                                                                 .p_buf_start = gs_buffer,
+                                                                 .buffer_len  = BLE_GATTS_QUEUE_BUFFER_LEN,
+                                                                 .p_queue     = gs_queue_elms,
+                                                                 .queue_size  = BLE_GATTS_QUEUE_ELEMENTS_SIZE,
+                                                                }
 };
 
 /* Connection handle */
@@ -175,7 +175,7 @@ uint16_t g_conn_hdl;
 
 /******************************************************************************
  User global variables
-*******************************************************************************/
+ *******************************************************************************/
 /* Start user code for global variables. Do not edit comment generated here */
 static TimerHandle_t      led_timer;
 static EventGroupHandle_t event_group;
@@ -203,7 +203,7 @@ static float sensor_data_array[3];
 
 /******************************************************************************
  Generated function definitions
-*******************************************************************************/
+ *******************************************************************************/
 /******************************************************************************
  * Function Name: gap_cb
  * Description  : Callback function for GAP API.
@@ -217,8 +217,8 @@ static float sensor_data_array[3];
  ******************************************************************************/
 void gap_cb(uint16_t type, ble_status_t result, st_ble_evt_data_t *p_data)
 {
-/* Hint: Input common process of callback function such as variable definitions */
-/* Start user code for GAP callback function common process. Do not edit comment generated here */
+    /* Hint: Input common process of callback function such as variable definitions */
+    /* Start user code for GAP callback function common process. Do not edit comment generated here */
     switch(type)
     {
         case BLE_GAP_EVENT_CONN_IND:
@@ -260,7 +260,7 @@ void gap_cb(uint16_t type, ble_status_t result, st_ble_evt_data_t *p_data)
         break;
     }
 
-/* End user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
 
     switch(type)
     {
@@ -298,21 +298,21 @@ void gap_cb(uint16_t type, ble_status_t result, st_ble_evt_data_t *p_data)
             st_ble_gap_conn_upd_req_evt_t *p_conn_upd_req_evt_param = (st_ble_gap_conn_upd_req_evt_t *)p_data->p_param;
 
             st_ble_gap_conn_param_t conn_updt_param = {
-                .conn_intv_min = p_conn_upd_req_evt_param->conn_intv_min,
-                .conn_intv_max = p_conn_upd_req_evt_param->conn_intv_max,
-                .conn_latency  = p_conn_upd_req_evt_param->conn_latency,
-                .sup_to        = p_conn_upd_req_evt_param->sup_to,
+                                                       .conn_intv_min = p_conn_upd_req_evt_param->conn_intv_min,
+                                                       .conn_intv_max = p_conn_upd_req_evt_param->conn_intv_max,
+                                                       .conn_latency  = p_conn_upd_req_evt_param->conn_latency,
+                                                       .sup_to        = p_conn_upd_req_evt_param->sup_to,
             };
 
             R_BLE_GAP_UpdConn(p_conn_upd_req_evt_param->conn_hdl,
-                              BLE_GAP_CONN_UPD_MODE_RSP,
-                              BLE_GAP_CONN_UPD_ACCEPT,
-                              &conn_updt_param);
+                    BLE_GAP_CONN_UPD_MODE_RSP,
+                    BLE_GAP_CONN_UPD_ACCEPT,
+                    &conn_updt_param);
         } break;
 
-/* Hint: Add cases of GAP event macros defined as BLE_GAP_XXX */
-/* Start user code for GAP callback function event process. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */
+        /* Hint: Add cases of GAP event macros defined as BLE_GAP_XXX */
+        /* Start user code for GAP callback function event process. Do not edit comment generated here */
+        /* End user code. Do not edit comment generated here */
     }
 }
 
@@ -329,8 +329,8 @@ void gap_cb(uint16_t type, ble_status_t result, st_ble_evt_data_t *p_data)
  ******************************************************************************/
 void gatts_cb(uint16_t type, ble_status_t result, st_ble_gatts_evt_data_t *p_data)
 {
-/* Hint: Input common process of callback function such as variable definitions */
-/* Start user code for GATT Server callback function common process. Do not edit comment generated here */
+    /* Hint: Input common process of callback function such as variable definitions */
+    /* Start user code for GATT Server callback function common process. Do not edit comment generated here */
     switch(type)
     {
         case BLE_GATTS_EVENT_DB_ACCESS_IND:
@@ -368,14 +368,14 @@ void gatts_cb(uint16_t type, ble_status_t result, st_ble_gatts_evt_data_t *p_dat
 
     /* Not using the QE generated GATTS code */
     return;
-/* End user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
 
     R_BLE_SERVS_GattsCb(type, result, p_data);
     switch(type)
     {
-/* Hint: Add cases of GATT Server event macros defined as BLE_GATTS_XXX */
-/* Start user code for GATT Server callback function event process. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */
+        /* Hint: Add cases of GATT Server event macros defined as BLE_GATTS_XXX */
+        /* Start user code for GATT Server callback function event process. Do not edit comment generated here */
+        /* End user code. Do not edit comment generated here */
     }
 }
 
@@ -392,17 +392,17 @@ void gatts_cb(uint16_t type, ble_status_t result, st_ble_gatts_evt_data_t *p_dat
  ******************************************************************************/
 void gattc_cb(uint16_t type, ble_status_t result, st_ble_gattc_evt_data_t *p_data)
 {
-/* Hint: Input common process of callback function such as variable definitions */
-/* Start user code for GATT Client callback function common process. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */
+    /* Hint: Input common process of callback function such as variable definitions */
+    /* Start user code for GATT Client callback function common process. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
 
     R_BLE_SERVC_GattcCb(type, result, p_data);
     switch(type)
     {
 
-/* Hint: Add cases of GATT Client event macros defined as BLE_GATTC_XXX */
-/* Start user code for GATT Client callback function event process. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */
+        /* Hint: Add cases of GATT Client event macros defined as BLE_GATTC_XXX */
+        /* Start user code for GATT Client callback function event process. Do not edit comment generated here */
+        /* End user code. Do not edit comment generated here */
     }
 }
 
@@ -419,10 +419,10 @@ void gattc_cb(uint16_t type, ble_status_t result, st_ble_gattc_evt_data_t *p_dat
  ******************************************************************************/
 void vs_cb(uint16_t type, ble_status_t result, st_ble_vs_evt_data_t *p_data)
 {
-/* Hint: Input common process of callback function such as variable definitions */
-/* Start user code for vender specific callback function common process. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */
-    
+    /* Hint: Input common process of callback function such as variable definitions */
+    /* Start user code for vender specific callback function common process. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
+
     R_BLE_SERVS_VsCb(type, result, p_data);
     switch(type)
     {
@@ -434,9 +434,9 @@ void vs_cb(uint16_t type, ble_status_t result, st_ble_vs_evt_data_t *p_data)
             RM_BLE_ABS_StartLegacyAdvertising(&g_ble_abs0_ctrl, &g_ble_advertising_parameter);
         } break;
 
-/* Hint: Add cases of vender specific event macros defined as BLE_VS_XXX */
-/* Start user code for vender specific callback function event process. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */
+        /* Hint: Add cases of vender specific event macros defined as BLE_VS_XXX */
+        /* Start user code for vender specific callback function event process. Do not edit comment generated here */
+        /* End user code. Do not edit comment generated here */
     }
 }
 
@@ -453,17 +453,17 @@ void vs_cb(uint16_t type, ble_status_t result, st_ble_vs_evt_data_t *p_data)
  ******************************************************************************/
 static void qc_svcs_cb(uint16_t type, ble_status_t result, st_ble_servs_evt_data_t *p_data)
 {
-/* Hint: Input common process of callback function such as variable definitions */
-/* Start user code for Quick Connect Service Server callback function common process. Do not edit comment generated here */
+    /* Hint: Input common process of callback function such as variable definitions */
+    /* Start user code for Quick Connect Service Server callback function common process. Do not edit comment generated here */
     FSP_PARAMETER_NOT_USED(result);
     FSP_PARAMETER_NOT_USED(p_data);
-/* End user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
 
     switch(type)
     {
-/* Hint: Add cases of Quick Connect Service server events defined in e_ble_qc_svcs_event_t */
-/* Start user code for Quick Connect Service Server callback function event process. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */
+        /* Hint: Add cases of Quick Connect Service server events defined in e_ble_qc_svcs_event_t */
+        /* Start user code for Quick Connect Service Server callback function event process. Do not edit comment generated here */
+        /* End user code. Do not edit comment generated here */
     }    
 }
 /******************************************************************************
@@ -493,8 +493,9 @@ ble_status_t ble_init(void)
     }
 
     /* Initialize GATT Database */
-    status = R_BLE_GATTS_SetDbInst(&g_gatt_db_table);
-    if (BLE_SUCCESS != status)
+    status = R_BLE_GATTS_SetDbInst(NULL);
+    /* There is known issue causing BLE_ERR_GATT_WRITE_NOT_PERMITTED on the FSP5.9.0 */
+    if (BLE_SUCCESS != status && BLE_ERR_GATT_WRITE_NOT_PERMITTED != status)
     {
         return BLE_ERR_INVALID_OPERATION;
     }
@@ -512,7 +513,7 @@ ble_status_t ble_init(void)
     {
         return BLE_ERR_INVALID_OPERATION;
     }
-    
+
     /* Set Prepare Write Queue */
     R_BLE_GATTS_SetPrepareQueue(gs_queue, BLE_GATTS_QUEUE_NUM);
 
@@ -540,11 +541,7 @@ void ble_app_init(void) {
 #endif
 
     /* Initialize BLE and profiles */
-    if (BLE_SUCCESS != ble_init())
-    {
-        /* There is know issue causing the init to fail on the FSP5.9.0 */
-        log_error("BLE init failed");
-    }
+    ble_init();
 
     /* Hint: Input process that should be done before main loop such as calling initial function or variable definitions */
     /* Start user code for process before main loop. Do not edit comment generated here */
@@ -561,39 +558,39 @@ void ble_app_init(void) {
 }
 
 void ble_app_run(void) {
-    /* Process BLE Event */
-    R_BLE_Execute();
-    /* When this BLE application works on the FreeRTOS */
+        /* Process BLE Event */
+        R_BLE_Execute();
+        /* When this BLE application works on the FreeRTOS */
 #if (BSP_CFG_RTOS == 2 || BSP_CFG_RTOS_USED == 1)
     if(0 != R_BLE_IsTaskFree()) {
-        /* If the BLE Task has no operation to be processed, it transits block state until the event from RF transciever occurs. */
-        xEventGroupWaitBits(g_ble_event_group_handle,
-                            (EventBits_t)BLE_EVENT_PATTERN,
-                            pdTRUE,
-                            pdFALSE,
-                            portMAX_DELAY);
-    }
+            /* If the BLE Task has no operation to be processed, it transits block state until the event from RF transciever occurs. */
+            xEventGroupWaitBits(g_ble_event_group_handle,
+                                (EventBits_t)BLE_EVENT_PATTERN,
+                                pdTRUE,
+                                pdFALSE,
+                                portMAX_DELAY);
+        }
 #endif
-    sm_sensor_data sensor_data;
-    EventBits_t event_bits = xEventGroupGetBits(event_group);
-    if (event_bits & EVENT_BIT_NOTIFY_CFM) {
-        xEventGroupClearBits(event_group, EVENT_BIT_NOTIFY_CFM);
-        qc_svc_handle_response_write_cfm();
+        sm_sensor_data sensor_data;
+        EventBits_t event_bits = xEventGroupGetBits(event_group);
+        if (event_bits & EVENT_BIT_NOTIFY_CFM) {
+            xEventGroupClearBits(event_group, EVENT_BIT_NOTIFY_CFM);
+            qc_svc_handle_response_write_cfm();
+        }
+        if (pdTRUE == xQueueReceive(g_sensor_queue, &sensor_data, 0)) {
+            uint32_t index = 2;
+            while (index < (uint32_t)sm_get_total_sensor_count()+2) {
+                if (qc_sv_req_handlers[index].sensor_handler.value == sensor_data.handle.value) {
+                    sm_scaling scaling;
+                    sm_get_sensor_scaling(sensor_data.handle, &scaling);
+                    float floatData = ((float)sensor_data.data * (float)scaling.multiplier)/(float)scaling.divider + (float)scaling.offset;
+                    sensor_data_array[index-2] = floatData;
+                    break;
+                }
+                index++;
+            }
+        }
     }
-    if (pdTRUE == xQueueReceive(g_sensor_queue, &sensor_data, 0)) {
-    	uint32_t index = 2;
-    	while (index < (uint32_t)sm_get_total_sensor_count()+2) {
-    		if (qc_sv_req_handlers[index].sensor_handler.value == sensor_data.handle.value) {
-                sm_scaling scaling;
-                sm_get_sensor_scaling(sensor_data.handle, &scaling);
-                float floatData = ((float)sensor_data.data * (float)scaling.multiplier)/(float)scaling.divider + (float)scaling.offset;
-                sensor_data_array[index-2] = floatData;
-    			break;
-    		}
-    		index++;
-    	}
-    }
-}
 
 void ble_app_close(void) {
     /* Terminate BLE */
@@ -602,7 +599,7 @@ void ble_app_close(void) {
 
 /******************************************************************************
  User function definitions
-*******************************************************************************/
+ *******************************************************************************/
 /* Start user code for function definitions. Do not edit comment generated here */
 static void handle_read_gui_req(uint16_t id, uint8_t const * const data)
 {
@@ -620,10 +617,11 @@ static void handle_read_gui_req(uint16_t id, uint8_t const * const data)
 static void handle_write_led(uint16_t id, uint8_t const * const data)
 {
     FSP_PARAMETER_NOT_USED(id);
+    FSP_PARAMETER_NOT_USED(data);
     static bool state = false;
- 
+    
     state = !state;
- 
+    
     if (state == false)
     {
         utils_set_LED(BLUE_LED,BSP_IO_LEVEL_LOW);
@@ -673,12 +671,12 @@ static void handle_read_data(uint16_t id, uint8_t const * const data)
     FSP_PARAMETER_NOT_USED(data);
     uint32_t index = 2;
     while (index < (uint32_t)sm_get_total_sensor_count()+2) {
-    	if (qc_sv_req_handlers[index].id == id) {
+        if (qc_sv_req_handlers[index].id == id) {
             log_debug("Sending id: 0x%04x");
             qc_svc_send_read_response(QC_SVC_SUCCESS, id, sizeof(sensor_data_array[0]), (uint8_t *)&sensor_data_array[index-2]);
             break;
-    	}
-    	index++;
+        }
+        index++;
     }
 }
 
