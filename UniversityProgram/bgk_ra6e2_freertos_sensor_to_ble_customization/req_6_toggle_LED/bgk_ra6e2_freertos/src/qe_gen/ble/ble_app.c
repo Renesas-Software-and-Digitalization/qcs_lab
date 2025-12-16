@@ -493,9 +493,8 @@ ble_status_t ble_init(void)
     }
 
     /* Initialize GATT Database */
-    status = R_BLE_GATTS_SetDbInst(NULL);
-    /* There is known issue causing BLE_ERR_GATT_WRITE_NOT_PERMITTED on the FSP5.9.0 */
-    if (BLE_SUCCESS != status && BLE_ERR_GATT_WRITE_NOT_PERMITTED != status)
+    status = R_BLE_GATTS_SetDbInst(&g_gatt_db_table);
+    if (BLE_SUCCESS != status)
     {
         return BLE_ERR_INVALID_OPERATION;
     }
@@ -541,7 +540,11 @@ void ble_app_init(void) {
 #endif
 
     /* Initialize BLE and profiles */
-    ble_init();
+    if (BLE_SUCCESS != ble_init())
+    {
+        /* There is know issue causing the init to fail on the FSP5.9.0 */
+        log_error("BLE init failed");
+    }
 
     /* Hint: Input process that should be done before main loop such as calling initial function or variable definitions */
     /* Start user code for process before main loop. Do not edit comment generated here */
@@ -617,7 +620,6 @@ static void handle_read_gui_req(uint16_t id, uint8_t const * const data)
 static void handle_write_led(uint16_t id, uint8_t const * const data)
 {
     FSP_PARAMETER_NOT_USED(id);
-    FSP_PARAMETER_NOT_USED(data);
     static bool state = false;
  
     state = !state;
