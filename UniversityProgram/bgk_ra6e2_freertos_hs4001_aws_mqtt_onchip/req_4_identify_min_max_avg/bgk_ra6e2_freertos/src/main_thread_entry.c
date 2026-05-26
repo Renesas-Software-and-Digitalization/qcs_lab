@@ -10,32 +10,31 @@
 #include "sm.h"
 #include "common_utils.h"
 // Uncomment the desired debug level
-//#include "log_disabled.h"
+#include "log_disabled.h"
 //#include "log_error.h"
 //#include "log_warning.h"
 //#include "log_info.h"
-#include "log_debug.h"
+//#include "log_debug.h"
 
 /******************************************************************************
  User Macros
 *******************************************************************************/
-/*REQ - 4: Identify min, Max average & absolute change of sensor values*/ //START
 // Define statistics offsets
 typedef enum {
-   VALUE = 0,
-   MIN,
+	VALUE = 0,
+	MIN,
    MAX,
    AVG,
    ABS,
    COUNT,
-   STATS_MAX_PARAMS
-}SensorStatsParams_t;// create automatic headers for each sensor
-/*REQ - 4: Identify min, Max average & absolute change of sensor values*/ //END
-/*REQ - 3: Modify the MQTT topic name as <sensor name>/<parameter>*/ //START
+	STATS_MAX_PARAMS
+}SensorStatsParams_t;
+
+// create automatic headers for each sensor
 #define DEFINE_SENSOR_DRIVER(DRIVER) char sensor_name[] = #DRIVER;
-#include "sm_define_sensors.inc"// Define sensor update periods (in milliseconds)
-/*REQ - 3: Modify the MQTT topic name as <sensor name>/<parameter>*/ //END
-/*REQ - 2: Change frequency of sensor update*/ //START
+#include "sm_define_sensors.inc"
+
+// Define sensor update periods (in milliseconds)
 typedef enum {
     PERIOD_10SEC = 10000,
     PERIOD_20SEC = 10000,
@@ -44,24 +43,20 @@ typedef enum {
     PERIOD_1MIN  = 60000
 } SensorUpdatePeriod_t;
 SensorUpdatePeriod_t sensor_update_period =  PERIOD_30SEC;  // Default setting
-/*REQ - 2: Change frequency of sensor update*/ //END
+
 #define WIDTH_64                                (64)
 #define CONNECT_TIMEOUT                         (5000)
 #define SUB_TOPIC_FILTER_COUNT                  ( 1 )
 #define PUBLISH_MAX_NUMBER                      ( 3 )
 #define QUEUE_RECEIVE_TIMEOUT					(100)	// this is the interval we also receive MQTT messages
-/*REQ - 2: Change frequency of sensor update*/ //START
-#define PUBLISHING_INTERVAL_MS	                sensor_update_period
-/*REQ - 2: Change frequency of sensor update*/ //END
+#define PUBLISHING_INTERVAL_MS 				sensor_update_period
 
 /******************************************************************************
  User global variables
 *******************************************************************************/
-/*REQ - 4: Identify min, Max average & absolute change of sensor values*/ //START
 static const char* stats_names[] = {"value", "minimum", "maximum", "average", "absolute_change"};
 #define STATS_NAMES_COUNT (sizeof(stats_names) / sizeof(stats_names[0]))
 static int32_t stats_values[NUM_SENSORS][STATS_MAX_PARAMS];
-/*REQ - 4: Identify min, Max average & absolute change of sensor values*/ //END
 extern TaskHandle_t sensor_thread;
 extern QueueHandle_t g_sensor_queue;
 mqtt_onchip_da16xxx_sub_info_t subTopics[SUB_TOPIC_FILTER_COUNT];
@@ -82,44 +77,40 @@ static const char *pSubTopics[SUB_TOPIC_FILTER_COUNT] = {
 /******************************************************************************
  User function prototype declarations
 *******************************************************************************/
-/*REQ - 4: Identify min, Max average & absolute change of sensor values*/ //START
 void update_sensor_stats(int32_t new_value, uint32_t senor_index);
-/*REQ - 4: Identify min, Max average & absolute change of sensor values*/ //END
 void clear_sensor_slots(sm_sensor_data * slots);
 
 /******************************************************************************
  User function implementations
 *******************************************************************************/
-/*REQ - 4: Identify min, Max average & absolute change of sensor values*/ //START
 // Function to update sensor statistics
 void update_sensor_stats(int32_t new_value, uint32_t senor_index) {
-   if(0 == stats_values[senor_index][COUNT])
-   {
-       stats_values[senor_index][MIN]      = new_value;
-       stats_values[senor_index][MAX]      = new_value;
-       stats_values[senor_index][AVG]      = new_value;
-       stats_values[senor_index][VALUE]    = new_value;
-       stats_values[senor_index][ABS]      = 0;
-       stats_values[senor_index][COUNT]++;
-       return;
-   }
-   if (new_value < stats_values[senor_index][MIN]) {
-       stats_values[senor_index][MIN] = new_value;
+	if(0 == stats_values[senor_index][COUNT])
+	{
+		stats_values[senor_index][MIN] 		= new_value;
+		stats_values[senor_index][MAX] 		= new_value;
+		stats_values[senor_index][AVG] 		= new_value;
+       stats_values[senor_index][VALUE] 	= new_value;
+       stats_values[senor_index][ABS] 		= 0;
+		stats_values[senor_index][COUNT]++;
+		return;
+	}
+	if (new_value < stats_values[senor_index][MIN]) {
+    	stats_values[senor_index][MIN] = new_value;
     }
 
     if (new_value > stats_values[senor_index][MAX]) {
-       stats_values[senor_index][MAX] = new_value;
+    	stats_values[senor_index][MAX] = new_value;
     }
 
     stats_values[senor_index][AVG] = (stats_values[senor_index][AVG] * stats_values[senor_index][COUNT] + new_value) / (stats_values[senor_index][COUNT] + 1);
     stats_values[senor_index][COUNT]++;
 
-    stats_values[senor_index][ABS] =   (new_value > stats_values[senor_index][VALUE]) ? \
-                                       (new_value - stats_values[senor_index][VALUE]) : \
-                                       (stats_values[senor_index][VALUE] - new_value);
+    stats_values[senor_index][ABS] = 	(new_value > stats_values[senor_index][VALUE]) ? \
+										(new_value - stats_values[senor_index][VALUE]) : \
+										(stats_values[senor_index][VALUE] - new_value);
     stats_values[senor_index][VALUE] = new_value;
 }
-/*REQ - 4: Identify min, Max average & absolute change of sensor values*/ //END
 
 void clear_sensor_slots(sm_sensor_data * slots) {
     memset(slots, 0, sizeof(sm_sensor_data) * NUM_SENSORS);
@@ -238,11 +229,12 @@ void main_thread_entry(void *pvParameters) {
                 if (0 == sensor_slots[index].handle.value || sensor_slots[index].handle.value == sensor_data.handle.value) {
                     // Found a slot
                     sensor_slots[index].handle.value = sensor_data.handle.value;
-/*REQ - 1: Change sensor units (Centigrade to Fahrenheit)*/ //START
-                    sensor_slots[index].data =  (TEMPERATURE == sm_get_sensor_type_by_handle(sensor_slots[index].handle)) ? \
-                                                ((sensor_data.data * 9) / 5) + 3200 : \
-                                                sensor_data.data;
-/*REQ - 1: Change sensor units (Centigrade to Fahrenheit)*/ //END
+					sensor_slots[index].data = 	(TEMPERATURE == sm_get_sensor_type_by_handle(sensor_slots[index].handle)) ? \
+
+												((sensor_data.data * 9) / 5) + 3200 : \
+
+												sensor_data.data;
+
                     num_sensors = index + 1;
                     break;
                 }
@@ -260,20 +252,15 @@ void main_thread_entry(void *pvParameters) {
                 sensor_slots[index2].data = (sensor_slots[index2].data * scaling.multiplier * 100) / scaling.divider;
                 char pub_message[WIDTH_64];
                 char pub_topic[WIDTH_64];
-/*REQ - 4: Identify min, Max average & absolute change of sensor values*/ //START
-                update_sensor_stats(sensor_slots[index2].data, index2);
-                for(SensorStatsParams_t stats_index = 0; stats_index < STATS_NAMES_COUNT; stats_index++){
-/*REQ - 3: Modify the MQTT topic name as <sensor name>/<parameter>*/ //START
-                	snprintf(pub_topic, WIDTH_64, IO_USERNAME"/%s/%s",\
-                			sensor_name,\
-/*REQ - 3: Modify the MQTT topic name as <sensor name>/<parameter>*/ //END
-                            sm_get_sensor_path_by_handle(sensor_slots[index2].handle),\
-                            stats_names[stats_index]\
-                              );
+              update_sensor_stats(sensor_slots[index2].data, index2);
+              for(SensorStatsParams_t stats_index = 0; stats_index < STATS_NAMES_COUNT; stats_index++){
+                    snprintf(pub_topic, WIDTH_64, IO_USERNAME"/feeds/%s/%s",\
+                    		sm_get_sensor_path_by_handle(sensor_slots[index2].handle),\
+							stats_names[stats_index]\
+                            );
                     snprintf((char*)pub_message, WIDTH_64, "%ld.%02ld",\
-                            stats_values[index2][stats_index]/100, \
-                            stats_values[index2][stats_index]%100);
-/*REQ - 4: Identify min, Max average & absolute change of sensor values*/ //END
+                    		stats_values[index2][stats_index]/100, \
+							stats_values[index2][stats_index]%100);
                 mqtt_onchip_da16xxx_pub_info_t pubData;
                 pubData.qos = MQTT_ONCHIP_DA16XXX_QOS_0,
                 pubData.p_topic_name = pub_topic;
@@ -288,16 +275,14 @@ void main_thread_entry(void *pvParameters) {
                 }
                 // The following delay is very important as RM_MQTT_DA16XXX_Publish do not send the data right away
                 // and without a delay further publishes will silently fail
-/*REQ - 4: Identify min, Max average & absolute change of sensor values*/ //START
-                vTaskDelay(200);
-              }
-/*REQ - 4: Identify min, Max average & absolute change of sensor values*/ //END
+                   vTaskDelay(200);
+                }
             }
             last_publishing_time = utils_systime_get();
             // Clear slots in preparation for another round of data
             clear_sensor_slots(sensor_slots);
         }
         // Check for received messages
-        RM_MQTT_DA16XXX_Receive(&g_rm_mqtt_onchip_da16xxx_instance, &g_mqtt_onchip_da16xxx_cfg);        
+        RM_MQTT_DA16XXX_Receive(&g_rm_mqtt_onchip_da16xxx_instance);        
     }
 }
