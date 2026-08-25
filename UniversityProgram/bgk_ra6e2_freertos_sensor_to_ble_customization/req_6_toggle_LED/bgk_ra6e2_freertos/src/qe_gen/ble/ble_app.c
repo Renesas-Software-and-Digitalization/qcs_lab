@@ -616,21 +616,21 @@ static void handle_read_gui_req(uint16_t id, uint8_t const * const data)
 
 static void handle_write_led(uint16_t id, uint8_t const * const data)
 {
-	FSP_PARAMETER_NOT_USED(id);
-	FSP_PARAMETER_NOT_USED(data);
+    FSP_PARAMETER_NOT_USED(id);
+    FSP_PARAMETER_NOT_USED(data);
+    static bool state = false;
+    
+    state = !state;
+    
+    if (state == false)
+    {
+        utils_set_LED(BLUE_LED,BSP_IO_LEVEL_LOW);
+    }
+    else
+    {
+        utils_set_LED(BLUE_LED,BSP_IO_LEVEL_HIGH);
+    }
 
-	static bool state = false;
-
-	state = !state;
-
-	if (state == false)
-	{
-		utils_set_LED(BLUE_LED,BSP_IO_LEVEL_LOW);
-	}
-	else
-	{
-		utils_set_LED(BLUE_LED,BSP_IO_LEVEL_HIGH);
-	}
 }
 
 static void handle_read_version(uint16_t id, uint8_t const * const data)
